@@ -9,14 +9,19 @@ import {
 import React, { useState } from "react";
 import { colors } from "../utils/colors";
 import { fonts } from "../utils/fonts";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import { useNavigation } from "@react-navigation/native";
 
 const SignupScreen = () => {
   const navigation = useNavigation();
-  const [secureEntery, setSecureEntery] = useState(true);
+  const [response, setResponse] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [secureEntry, setSecureEntry] = useState(true);
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -25,7 +30,20 @@ const SignupScreen = () => {
   const handleLogin = () => {
     navigation.navigate("LOGIN");
   };
-
+  const submithandler = async()=>{
+    try {
+      response = await axios.post("http://localhost:4040/api/v1/candidate/register",{
+        name:name,
+        address:address,
+        phoneno:phone,
+        email:email,
+        password:password
+    })
+    setResponse(response);
+    } catch (error) {
+      console.log(error);
+    }
+ }
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButtonWrapper} onPress={handleGoBack}>
@@ -41,6 +59,17 @@ const SignupScreen = () => {
       </View>
       {/* form  */}
       <View style={styles.formContainer}>
+      <View style={styles.inputContainer}>
+          <Ionicons name={"person-outline"} size={30} color={colors.secondary} />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Enter your name"
+            placeholderTextColor={colors.secondary}
+            keyboardType="name"
+            value={name}
+            onChange={(e)=> setName(e.target.value)}
+          />
+        </View>
         <View style={styles.inputContainer}>
           <Ionicons name={"mail-outline"} size={30} color={colors.secondary} />
           <TextInput
@@ -48,6 +77,8 @@ const SignupScreen = () => {
             placeholder="Enter your email"
             placeholderTextColor={colors.secondary}
             keyboardType="email-address"
+            value={email}
+            onChange={(e)=> setEmail(e.target.value)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -56,11 +87,13 @@ const SignupScreen = () => {
             style={styles.textInput}
             placeholder="Enter your password"
             placeholderTextColor={colors.secondary}
-            secureTextEntry={secureEntery}
+            secureTextEntry={secureEntry}
+            value={password}
+            onChange={(e)=> setPassword(e.target.value)}
           />
           <TouchableOpacity
             onPress={() => {
-              setSecureEntery((prev) => !prev);
+              setSecureEntry((prev) => !prev);
             }}
           >
             <SimpleLineIcons name={"eye"} size={20} color={colors.secondary} />
@@ -76,15 +109,26 @@ const SignupScreen = () => {
             style={styles.textInput}
             placeholder="Enter your phone no"
             placeholderTextColor={colors.secondary}
-            secureTextEntry={secureEntery}
+            secureTextEntry={secureEntry}
             keyboardType="phone-pad"
+            value={phone}
+            onChange={(e)=> setPhone(e.target.value)}
           />
         </View>
-
-        <TouchableOpacity style={styles.loginButtonWrapper}>
+        <View style={styles.inputContainer}>
+          <Ionicons name={"home-outline"} size={30} color={colors.secondary} />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Enter your address"
+            placeholderTextColor={colors.secondary}
+            keyboardType="address"
+            value={address}
+            onChange={(e)=> setAddress(e.target.value)}
+          />
+        </View>
+        <TouchableOpacity onPress={submithandler} style={styles.loginButtonWrapper}>
           <Text style={styles.loginText}>Sign up</Text>
         </TouchableOpacity>
-        <Text style={styles.continueText}>or continue with</Text>
         <View style={styles.footerContainer}>
           <Text style={styles.accountText}>Already have an account!</Text>
           <TouchableOpacity onPress={handleLogin}>
@@ -162,24 +206,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fonts.Regular,
     color: colors.primary,
-  },
-  googleButtonContainer: {
-    flexDirection: "row",
-    borderWidth: 2,
-    borderColor: colors.primary,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    gap: 10,
-  },
-  googleImage: {
-    height: 20,
-    width: 20,
-  },
-  googleText: {
-    fontSize: 20,
-    fontFamily: fonts.SemiBold,
   },
   footerContainer: {
     flexDirection: "row",

@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const [secureEntery, setSecureEntery] = useState(true);
+  const [secureEntry, setSecureEntry] = useState(true);
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -56,11 +56,11 @@ const LoginScreen = () => {
             style={styles.textInput}
             placeholder="Enter your password"
             placeholderTextColor={colors.secondary}
-            secureTextEntry={secureEntery}
+            secureTextEntry={secureEntry}
           />
           <TouchableOpacity
             onPress={() => {
-              setSecureEntery((prev) => !prev);
+              setSecureEntry((prev) => !prev);
             }}
           >
             <SimpleLineIcons name={"eye"} size={20} color={colors.secondary} />
@@ -72,7 +72,6 @@ const LoginScreen = () => {
         <TouchableOpacity style={styles.loginButtonWrapper}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
-        <Text style={styles.continueText}>or continue with</Text>
   
         <View style={styles.footerContainer}>
           <Text style={styles.accountText}>Don’t have an account?</Text>
@@ -151,24 +150,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fonts.Regular,
     color: colors.primary,
-  },
-  googleButtonContainer: {
-    flexDirection: "row",
-    borderWidth: 2,
-    borderColor: colors.primary,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    gap: 10,
-  },
-  googleImage: {
-    height: 20,
-    width: 20,
-  },
-  googleText: {
-    fontSize: 20,
-    fontFamily: fonts.SemiBold,
   },
   footerContainer: {
     flexDirection: "row",
